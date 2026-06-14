@@ -2,10 +2,24 @@
     #include <vector>
     #include <cstdlib>
     #include <ctime>
-    /* This algorithem is learning if the sum of two numbers is greater or lower then 100
-        we generatet 10000 data points that helps the algorithem create the boundury ( the line ) between the 
-        result  1 ->( x1+x2 >100) and  0 ->( x1+x2<100)
-    */
+/*
+ * Machine Learning Profile:
+ * ----------------------------------------------------------------------
+ * - Model: Single-Layer Perceptron (Linear Classifier / Binary Threshold Model)
+ * - Optimizer: Perceptron Learning Rule (Fixed Learning Rate)
+ * - Batch Method: Stochastic Online Learning (Updates weights immediately after checking each data point)
+ * - Regularization: None (Unpenalized weights)
+ * - Loss Math: Error-driven step adjustment Delta Rule: alpha * (target - prediction) * input
+ * - Metric: Classification Accuracy (%) checked over a separate validation set
+ * ----------------------------------------------------------------------
+ * This program implements a single-layer Perceptron from scratch to learn a binary classification 
+ * boundary. It generates 10,000 synthetic data points where the target label (y) is 1 if the sum of 
+ * two random integers exceeds 100, and 0 otherwise. The network models a linear decision boundary 
+ * using a bias weight (w1) and two feature weights (w2, w3) paired with a step activation function. 
+ * Over 40 epochs, the training loop applies the classic Perceptron Learning Rule to immediately 
+ * correct parameters whenever a misclassification occurs, driving the system to discover the mathematical 
+ * separation line between the two decision spaces.
+ */
     class  Perceptron{
         public:
             double w1, w2 ,w3 ;
@@ -84,6 +98,7 @@
             }
     };
     int main(){
+        system("cls");
         std::srand(std::time(nullptr));  
         Perceptron perceptron(0,0,0);
         PerceptronTrainer perceptronTrainer(perceptron);

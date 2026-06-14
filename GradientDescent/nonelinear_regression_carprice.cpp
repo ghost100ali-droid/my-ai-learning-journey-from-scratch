@@ -4,14 +4,25 @@
 #include <ctime>
 #include <cmath>
 
-/*  This program implements a simple model to predict used car prices based on the purchase price, age (years), 
-   and mileage. The model uses three weights (w0, w1, w2) in an exponential model to approximate the relationship between 
-   these input features and the estimated car price. The application generates synthetic data points using a true underlying 
-   model with known weights and then trains the model using gradient descent to minimize the prediction error. During training, 
-   the model adjusts its weights iteratively based on the difference between the predicted price and the generated estimated price. 
-   After training, the model can predict the price of a car for given input values, providing an estimated resale value. 
-   The algorithm demonstrates supervised learning with a nonlinear model and weight optimization through iterative updates.
-*/
+/*
+ * Machine Learning Profile:
+ * ----------------------------------------------------------------------
+ * - Model: Exponential Regression (Non-Linear Model)
+ * - Optimizer: Vanilla Gradient Descent (Fixed Learning Rate)
+ * - Batch Method: Stochastic Gradient Descent / SGD (Updates weights immediately after each data point)
+ * - Regularization: None (Unpenalized parameters)
+ * - Loss Math: Mean Squared Error (MSE) custom exponential partial derivatives
+ * - Metric: Mean Absolute Error (MAE) used for evaluation  
+ * ----------------------------------------------------------------------
+ * This program implements a non-linear exponential regression model from scratch to predict 
+ * used car resale values based on three features: original purchase price, age, and mileage. 
+ * The dataset is generated synthetically using feature scaling and a hidden, true underlying 
+ * equation (w0=1.0, w1=3.2, w2=0.08). Training is performed over 100 epochs using Stochastic 
+ * Gradient Descent (SGD) with a fixed learning rate (alpha = 0.05). By calculating the 
+ * custom partial derivatives of the exponential function for each weight (w0, w1, w2) on 
+ * every data point, the optimization loop shifts the model's parameters to fit the non-linear 
+ * decay curves and minimizes prediction error.
+ */
 
 class CarPriceModel{
     public: 
@@ -102,10 +113,10 @@ class ModelTrainer{
 
             std::cout << "The equation from which the synthetic data was created is:\n";
             std::cout << "w0_true * boughtPrice/300000 * exp(w1_true * (-yearOld/30)) * exp(w2_true * (-mileage/300000))\n";
-            std::cout << "The weights of the synthetic data are:\n";
-            std::cout << "w0 = 1, w1 = 3.2, w2 = 0.08\n\n";
+            std::cout << "The weights of the synthetic data are : ";
+            std::cout << "w0 = 1 , w1 = 3.2 , w2 = 0.08\n\n";
 
-            std::cout << "The model's weights after training are: W0 = " << carPriceModel.w0 << ", W1 = " << carPriceModel.w1 << ", W2 = " << carPriceModel.w2 << "\n";
+            std::cout << "The model's weights after training are : W0 = " << carPriceModel.w0 << ", W1 = " << carPriceModel.w1 << ", W2 = " << carPriceModel.w2 << "\n";
             std::cout << "The Mean Absolute Error is: $" << meanAbsoluteError << "\n";
         }
 };
