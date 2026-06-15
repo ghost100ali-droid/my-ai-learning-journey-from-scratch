@@ -26,8 +26,8 @@
             double alpha=0.0005;
             Perceptron(double w1=0,double w2=0,double w3=0):w1(w1),w2(w2),w3(w3){}
             void printWeights() {
-                std::cout << "\nWeights:\n";
-                std::cout << "w1 = " << w1 << ", w2 = " << w2 << ", w3 = " << w3 << "\n";
+                std::cout << "Weights of the trained model: ";
+                std::cout << "w1 = " << w1 << ", w2 = " << w2 << ", w3 = " << w3 << "\n\n";
             }
     };
     class DataPoint{
@@ -67,12 +67,6 @@
                 int result=(y >= 0) ? 1 : 0;
                 return result;
             }
-            void test(int x1, int x2){
-                double y= perceptron.w1 + perceptron.w2*x1 + perceptron.w3*x2;  
-                std::cout<<"For x1= "<<x1<<", x2="<<x2<< " , y is  :"<< y;
-                int result=predict(x1, x2);
-                std::cout<<"\nResult is :"<<result;
-            }
             void evaluate(int numSamples = 1000) {
                 int correct = 0;
 
@@ -86,15 +80,15 @@
                         correct++;
                     }
                 }
-
                 double accuracy = (double)correct / numSamples * 100;
+
+                std::cout<<"The model is trying to figure out if x1 + x2 > 100\n";
                 std::cout << "Accuracy on " << numSamples << " test samples: " << accuracy << "%\n";
             }
             PerceptronTrainer(Perceptron &ai): perceptron(ai){}
 
             void run(){
-                train(40);  // for each datapoint it trains it 40 times
-                test(94,7);
+                train(40);  
             }
     };
     int main(){
@@ -103,7 +97,7 @@
         Perceptron perceptron(0,0,0);
         PerceptronTrainer perceptronTrainer(perceptron);
         perceptronTrainer.run();
-        perceptron.printWeights();
         perceptronTrainer.evaluate();
+        perceptron.printWeights();
         return 0 ;
     }
