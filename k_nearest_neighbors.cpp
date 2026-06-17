@@ -5,6 +5,26 @@
 #include <random>
 #include <map>
 
+/*
+ * Machine Learning Profile:
+ * ----------------------------------------------------------------------
+ * - Model: k-Nearest Neighbors (k-NN) (Instance-Based / Non-Parametric Classifier)
+ * - Optimizer: None (Lazy Learner / Memorizes training instances)
+ * - Batch Method: Lazy Evaluation (Calculates distances dynamically during inference)
+ * - Regularization: Hyperparameter k (Higher k values smooth out the decision boundaries)
+ * - Distance Math: Standard L2 Euclidean Metric: sqrt((x1 - x2)^2 + (y1 - y2)^2)
+ * - Metric: Plurality Majority Voting among the k-closest localized coordinates
+ * ----------------------------------------------------------------------
+ * This program implements a k-Nearest Neighbors (k-NN) classification algorithm from scratch 
+ * to handle multi-class spatial recognition. It automatically builds a synthetic dataset 
+ * consisting of 120 geometric coordinate records grouped into 3 distinct overlapping circular 
+ * clusters centered symmetrically in a 2D vector space. Unlike parametric models, this structure 
+ * requires no active training epoch phases; instead, it saves the reference space directly to 
+ * memory. During the query prediction runtime, the classifier computes the explicit Euclidean 
+ * distance from an unknown point to every instance in the dataset, isolates the top k (k=5) 
+ * closest neighbors via structural sorting, and classifies the target using a majority vote.
+ */
+
 const double PI = 3.14159265358979323846;
 
 struct Point {
