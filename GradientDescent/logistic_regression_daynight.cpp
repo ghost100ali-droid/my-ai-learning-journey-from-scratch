@@ -75,11 +75,11 @@ class ModelTrainer {
                     double normalize=dp.hour/24.0;
                     double z = dayNightModel.w0 + dayNightModel.w1 * normalize + dayNightModel.w2 * std::pow(normalize,2);
                     double predicted = sigmoid(z);
-                    double error = dp.isLight - predicted;
+                    double error = predicted - dp.isLight ;
 
-                    dayNightModel.w0 += dayNightModel.alpha * error;
-                    dayNightModel.w1 += dayNightModel.alpha * error * normalize;
-                    dayNightModel.w2 += dayNightModel.alpha * error * std::pow(normalize,2);
+                    dayNightModel.w0 -= dayNightModel.alpha * error;
+                    dayNightModel.w1 -= dayNightModel.alpha * error * normalize;
+                    dayNightModel.w2 -= dayNightModel.alpha * error * std::pow(normalize,2);
 
                 }
             }

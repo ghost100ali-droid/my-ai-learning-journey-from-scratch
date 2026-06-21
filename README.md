@@ -28,8 +28,18 @@ Some simple projets:
 5. ## Polynomial Logistic Regression Day/Night Classifier
     - **Project Goal:** The algorithm learns to classify a given hour of the day as either daytime (light) or nighttime (dark) using supervised polynomial logistic regression, successfully capturing multiple temporal thresholds simultaneously.
     - **Mathematical Framework:** Because a single-neuron model cannot inherently separate non-linear data structures (where an island of light is trapped between two periods of darkness), the algorithm expands the input space using a polynomial expansion. By calculating a quadratic feature component ($\text{hour}^2$), the model wraps a parabolic decision boundary around the daylight parameters. The raw hypothesis is pushed through a Sigmoid activation function to map real values to a stable probability distribution between $[0, 1]$. It is expressed as:
-        > $$\Large z = w_0 + w_1 \cdot \left(\frac{\text{hour}}{24}\right) + w_2 \cdot \left(\frac{\text{hour}}{24}\right)^2$$
-        > $$\Large \text{predictedIfLight (Probability)} = \frac{1}{1 + e^{-z}}$$
+        > $$\Large Z = w_0 + w_1 \cdot \left(\frac{\text{hour}}{24}\right) + w_2 \cdot \left(\frac{\text{hour}}{24}\right)^2$$
+        > $$\Large Z = w_0 + w_1 \cdot X_1 + w_2 \cdot X_2^2$$
+        > $$\Large \text{predicted (Z)} = \frac{1}{1 + e^{-z}}$$
+        > $$Loss = - \big[ y \ln(predicted) + (1 - y) \ln(1 - predicted) \big]$$
+        > $$\frac{\partial \text{Loss}}{\partial w_j} = \frac{\partial \text{Loss}}{\partial \text{predicted}} \times \frac{\partial \text{predicted}}{\partial z} \times \frac{\partial z}{\partial w_j}$$
+        > $$\frac{\partial \text{Loss}}{\partial w_j} = \frac{\text{predicted} - y}{\cancel{\text{predicted}(1 - \text{predicted})}} \times \cancel{\text{predicted}(1 - \text{predicted})} \times \frac{\partial z}{\partial w_j}$$
+        > $$\frac{\partial \text{Loss}}{\partial w_j} = (\text{predicted} - y) \times \frac{\partial z}{\partial w_j}$$
+        ---
+        > $$w_j \leftarrow w_j - \alpha \cdot \frac{\partial \text{Loss}}{\partial w_j} $$
+        > $$w_0 \leftarrow w_0 - \alpha \cdot (predicted - y)$$
+        > $$w_1 \leftarrow w_1 - \alpha \cdot (predicted - y) \cdot x$$
+        > $$w_2 \leftarrow w_2 - \alpha \cdot (predicted - y) \cdot x^2$$
     - **Implementation Details:** The engine implements a parametric polynomial logistic regression network built entirely from scratch in. The training pipeline dynamically generates a synthetic matrix of 10,000 distinct timestamps, automatically establishing ground-truth boundaries between sunrise (6.00) and sunset (18.00). To avoid gradient saturation across the Sigmoid curves and ensure smooth numeric step adjustments, time values are scaled directly down to a normalized $[0, 1]$ decimal range. Utilizing Stochastic Online Learning paired with Gradient Descent, the network iteratively tunes the feature parameters ($w_0, w_1, w_2$) using a learning rate ($\alpha = 0.01$) over 100 epochs, allowing the model to conform perfectly to the parabolic thresholds and maximize evaluation classification accuracy.
 6.  ## Q-Learning Path Finder
     - **Project Goal:** The algorithm learns to navigate an autonomous agent through a 2D grid matrix containing static obstacles, discovering the shortest optimal path from a specific starting position to a designated target destination.
@@ -48,3 +58,4 @@ Some simple projets:
         > $$\Large \delta_{\text{output}} = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)$$
         > $$\Large \delta_{\text{hidden}_j} = \delta_{\text{output}} \cdot w_{j} \cdot h_j(1 - h_j)$$
     - **Implementation Details:** The engine implements a raw feedforward backpropagation neural network engineered entirely in C++ without external machine learning dependencies. The network structures its parameter matrices dynamically with random initialization between $[-1, 1]$ across two input nodes, two hidden neurons, and a single output neuron. Utilizing supervised batch-epoch processing over 10,000 learning iterations, the trainer systematically minimizes global error using a fixed learning rate ($\eta = 0.5$). Weights ($w$) and biases ($b$) are simultaneously adjusted at each step according to the computed localized gradients, ensuring the final network successfully pushes its classification thresholds to isolate the non-linear XOR vectors.
+    ![alt text](1000000092.jpg)
