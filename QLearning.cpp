@@ -3,17 +3,32 @@
 #include <cstdlib>
 #include <ctime>
 using namespace std;
-// This algorithm implements Q-learning, a reinforcement learning technique used to find the optimal path in a 2D grid.
-//  The agent begins at a starting position and aims to reach the end while avoiding obstacles. 
-//  It can move in four directions: up, down, left, or right. A Q-table is maintained to store expected rewards (Q-values) 
-//  for each state-action pair. During training, the agent selects actions using an epsilon-greedy policy, 
-//  sometimes exploring randomly and sometimes exploiting the best-known action. After each move, 
-//  the Q-value is updated based on the received reward and the maximum predicted future reward. 
-//  Normal cells provide a small negative reward, while reaching the goal gives a high positive reward. 
-//  After training, the agent can follow the highest Q-values to determine the optimal path to the target.
+
+/*
+ * Machine Learning Profile:
+ * ----------------------------------------------------------------------
+ * - Model: Q-Learning (Model-Free, Value-Based Reinforcement Learning)
+ * - Optimizer: Temporal Difference (TD) Target Value Iteration Update
+ * - Policy Method: Epsilon-Greedy Exploration (epsilon-decay over steps)
+ * - Environment Space: Deterministic 2D Grid World (8 X 6 discrete state space)
+ * - Reward Structure: Step penalty (-1), Wall/blockade crash penalty (-6), Goal reward (+100)
+ * - Convergence Guard: Cap at 150 maximum steps per training episode
+ * ----------------------------------------------------------------------
+ * This program implements a tabular Q-Learning agent from scratch to solve a 2D grid world pathfinding
+ * problem with static obstacles. The environment maps state coordinates to a 3D tensor storing expected 
+ * utility values for four discrete directional actions (Up, Down, Right, Left). During training over 1000 
+ * episodes, the agent optimizes its policy using an epsilon-greedy approach that balances random actions 
+ * with structural exploitation. By updating state-action matrix blocks via the Bellman Optimality equation, 
+ * the model balances immediate step penalties against optimal future discount factors (gamma = 0.8). Upon 
+ * training completion, the agent exploits its converged table tracking to derive the short-path trajectory.
+ */
+
 struct State {
     int row , col ;
     State(int row , int col ) : row(row), col(col){}
+    bool operator==(const State& other) const {
+        return (row == other.row && col == other.col);
+    }
 };
 class QLearning{
     private:
@@ -25,7 +40,7 @@ class QLearning{
         const int ACTIONS=4;
             double exploreRate = 1.0; 
             double minExploreRate = 0.03;
-            double decay = 0.995;
+            double decay = 0.997;
         double alpha;
         double gamma;
         vector<vector<vector<double>>> Q;
@@ -46,7 +61,9 @@ class QLearning{
         void train(int episodes = 1){
             for ( int i=0 ;i < episodes; i++){
                 State s = start;
+                int countSteps=0;
                 while ( true ){
+                    countSteps++;
                     int action;
                     if((double)rand() / RAND_MAX < exploreRate){
                         action = getRandomAction();
@@ -59,8 +76,10 @@ class QLearning{
                         }
 
                     }
+                    int hitWall=0;
                     State next = move(s,action);
-                    int reward = rewards[next.row][next.col];
+                    (next==s)? hitWall=-5 : hitWall=0;
+                    int reward = rewards[next.row][next.col] + hitWall;
 
                     double maxQ = Q[next.row][next.col][0];
                     for( int a = 1 ; a < ACTIONS ; ++a ){
@@ -71,7 +90,8 @@ class QLearning{
 
                     s = next;
                     exploreRate = max(minExploreRate, exploreRate * decay);
-                    if (reward == 100) break; 
+
+                    if (reward == 100 || countSteps == 150 ) break;
                 }
             }
         }
@@ -117,7 +137,8 @@ class QLearning{
 };
 int main (){
 srand(time(nullptr));
-
+system("cls");
+std::cout<<"The shortes path is : \n";
 vector<vector<char>> grid ={
     {'.','.','.','#','.','.'},
     {'.','.','#','#','.','.'},
