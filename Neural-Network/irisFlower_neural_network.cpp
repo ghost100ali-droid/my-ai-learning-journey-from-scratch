@@ -120,7 +120,7 @@ class NeuralNetwork{
                         hiddenError[i] = error_sum * sigmoid_derivative(hiddenNeuron[i]);
                     }
 
-                    // 4. Update Weights and Biases between Hidden and Output Layer (WHO)
+                    // Update Weights and Biases between Hidden and Output Layer (WHO)
                     for (int i = 0; i < 3; i++) {
                         for (int j = 0; j < 14; j++) {
                             WHO[j][i] -= learningRateAlpha * outputError[i] * hiddenNeuron[j];
@@ -128,7 +128,7 @@ class NeuralNetwork{
                         biasOutput[i] -= learningRateAlpha * outputError[i];
                     }
 
-                    // 5. Update Weights and Biases between Input and Hidden Layer (WIH)
+                    // Update Weights and Biases between Input and Hidden Layer (WIH)
                     for (int i = 0; i < 14; i++) {
                         for (int j = 0; j < 4; j++) {
                             WIH[j][i] -= learningRateAlpha * hiddenError[i] * inputNeuron[j];
@@ -187,12 +187,33 @@ class NeuralNetwork{
             std::cout << "The probability for Iris-Virginica:  " << (outputNeuron[2] * 100.0) << "%" << std::endl;        
         }
 
+        void evaluate(){
+            int  CountRightAnswers=0;
+
+            for( const auto& sample : dataset){
+                forward(sample.features[0],sample.features[1],sample.features[2],sample.features[3]);
+                auto maxValueOfOutput= std::max_element(outputNeuron.begin(), outputNeuron.end());
+                int answerOfOutput = std::distance(outputNeuron.begin() ,  maxValueOfOutput);
+
+                auto maxValueOfSample= std::max_element(sample.target.begin(), sample.target.end());
+                int answerOfSample = std::distance(sample.target.begin() , maxValueOfSample);
+                if(answerOfOutput== answerOfSample){
+                    CountRightAnswers++;
+                }
+            }
+            double percentage = (static_cast<double>(CountRightAnswers) / dataset.size()) * 100.0;
+            std::cout<<"\nResults:";
+            std::cout << "\nNetwork Architecture: 4 Input Neurons | 14 Hidden Neurons | 3 Output Neurons";
+            std::cout << "\nTrained on 150 shuffled samples over 500 epochs.\n";
+            std::cout<<"Correct answers : "<< CountRightAnswers <<" out of "<< dataset.size() <<" | in Percantage : "<<percentage<<" %\n\n";
+        }
+
 };
 
 int main(){
     srand(time(0));
     NeuralNetwork nn;
-    nn.forward( 7.7,2.8,6.7,2.0);
-    nn.printOutput();
+    system("cls");
+    nn.evaluate();
     return 0;
 }
