@@ -23,23 +23,33 @@ Some simple projets:
     - **Project Goal:** The algorithm learns to classify multi-class spatial data points across geometric distributions by analyzing local structural density and assigning category labels based on spatial proximity.
     - **Mathematical Framework:** The model is non-parametric and relies on distance-based localized voting rather than explicit weights. To evaluate proximity between an unlabelled query point $q$ and a reference dataset point $p$ in a two-dimensional Euclidean vector space, the engine calculates the standard geometric L2 distance metric. This is mathematically defined as:
         > $$\Large \text{distance}(q, p) = \sqrt{(q.x - p.x)^2 + (q.y - p.y)^2}$$
+        >
         > $$\Large P(y = c \mid q) = \frac{1}{k} \sum_{i \in N_k(q)} I(y_i = c)$$
     - **Implementation Details:** This system implements a $k$-Nearest Neighbors ($k$-NN) instance-based classifier built entirely from scratch in C++. The training pipeline automatically synthesizes a dataset containing 120 geometric coordinate clusters distributed symmetrically across three overlapping circular spaces centered at distinct coordinates ($(0, 0)$, $(3, 0)$, and $(1.5, 2.598)$). During execution, the framework calculates the Euclidean distance from a target query to every spatial coordinate vector in the memory matrix, sorts the results using a quick-sort variant, and isolates the top $k$ closest neighbors ($k=5$). The output label is determined via a majority plurality vote from the selected neighbors, enabling highly accurate non-linear classification boundaries without requiring a formal iterative training phase.
 5. ## Polynomial Logistic Regression Day/Night Classifier
     - **Project Goal:** The algorithm learns to classify a given hour of the day as either daytime (light) or nighttime (dark) using supervised polynomial logistic regression, successfully capturing multiple temporal thresholds simultaneously.
     - **Mathematical Framework:** Because a single-neuron model cannot inherently separate non-linear data structures (where an island of light is trapped between two periods of darkness), the algorithm expands the input space using a polynomial expansion. By calculating a quadratic feature component ($\text{hour}^2$), the model wraps a parabolic decision boundary around the daylight parameters. The raw hypothesis is pushed through a Sigmoid activation function to map real values to a stable probability distribution between $[0, 1]$. It is expressed as:
         > $$\Large Z = w_0 + w_1 \cdot \left(\frac{\text{hour}}{24}\right) + w_2 \cdot \left(\frac{\text{hour}}{24}\right)^2$$
-        > - $$\Large Z = w_0 + w_1 \cdot X_1 + w_2 \cdot X_2^2$$
-        > - $$\Large \text{predicted (Z)} = \frac{1}{1 + e^{-z}}$$
-        > - $$Loss = - \big[ y \ln(predicted) + (1 - y) \ln(1 - predicted) \big]$$
-        > - $$\frac{\partial \text{Loss}}{\partial w_j} = \frac{\partial \text{Loss}}{\partial \text{predicted}} \times \frac{\partial \text{predicted}}{\partial z} \times \frac{\partial z}{\partial w_j}$$
-        > - $$\frac{\partial \text{Loss}}{\partial w_j} = \frac{\text{predicted} - y}{\cancel{\text{predicted}(1 - \text{predicted})}} \times \cancel{\text{predicted}(1 - \text{predicted})} \times \frac{\partial z}{\partial w_j}$$
-        > - $$\frac{\partial \text{Loss}}{\partial w_j} = (\text{predicted} - y) \times \frac{\partial z}{\partial w_j}$$
+        >
+        > $$\Large Z = w_0 + w_1 \cdot X_1 + w_2 \cdot X_2^2$$
+        >
+        > $$\Large \text{predicted (Z)} = \frac{1}{1 + e^{-z}}$$
+        >
+        > $$Loss = - \big[ y \ln(predicted) + (1 - y) \ln(1 - predicted) \big]$$
+        >
+        > $$\frac{\partial \text{Loss}}{\partial w_j} = \frac{\partial \text{Loss}}{\partial \text{predicted}} \times \frac{\partial \text{predicted}}{\partial z} \times \frac{\partial z}{\partial w_j}$$
+        >
+        > $$\frac{\partial \text{Loss}}{\partial w_j} = \frac{\text{predicted} - y}{\cancel{\text{predicted}(1 - \text{predicted})}} \times \cancel{\text{predicted}(1 - \text{predicted})} \times \frac{\partial z}{\partial w_j}$$
+        >
+        > $$\frac{\partial \text{Loss}}{\partial w_j} = (\text{predicted} - y) \times \frac{\partial z}{\partial w_j}$$
         ---
-        > - $$w_j \leftarrow w_j - \alpha \cdot \frac{\partial \text{Loss}}{\partial w_j} $$
-        > - $$w_0 \leftarrow w_0 - \alpha \cdot (predicted - y)$$
-        > - $$w_1 \leftarrow w_1 - \alpha \cdot (predicted - y) \cdot x$$
-        > - $$w_2 \leftarrow w_2 - \alpha \cdot (predicted - y) \cdot x^2$$
+        > $$w_j \leftarrow w_j - \alpha \cdot \frac{\partial \text{Loss}}{\partial w_j} $$
+        >
+        > $$w_0 \leftarrow w_0 - \alpha \cdot (predicted - y)$$
+        >
+        > $$w_1 \leftarrow w_1 - \alpha \cdot (predicted - y) \cdot x$$
+        >
+        > $$w_2 \leftarrow w_2 - \alpha \cdot (predicted - y) \cdot x^2$$
     - **Implementation Details:** The engine implements a parametric polynomial logistic regression network built entirely from scratch in. The training pipeline dynamically generates a synthetic matrix of 10,000 distinct timestamps, automatically establishing ground-truth boundaries between sunrise (6.00) and sunset (18.00). To avoid gradient saturation across the Sigmoid curves and ensure smooth numeric step adjustments, time values are scaled directly down to a normalized $[0, 1]$ decimal range. Utilizing Stochastic Online Learning paired with Gradient Descent, the network iteratively tunes the feature parameters ($w_0, w_1, w_2$) using a learning rate ($\alpha = 0.01$) over 100 epochs, allowing the model to conform perfectly to the parabolic thresholds and maximize evaluation classification accuracy.
 6.  ## Q-Learning Path Finder
     - **Project Goal:** The algorithm learns to navigate an autonomous agent through a 2D grid matrix containing static obstacles, discovering the shortest optimal path from a specific starting position to a designated target destination.
@@ -56,22 +66,31 @@ Some simple projets:
     - **Project Goal:** The algorithm learns to resolve the classic non-linearly separable XOR logical function, training a multi-layer neural network from scratch to map binary input coordinate pairs into their correct single-bit parity outputs.
     - **Mathematical Framework:** Because a single-layer perceptron cannot construct a non-linear decision boundary to isolate the staggered true and false coordinates of an XOR truth table, the system utilizes a 2-2-1 feedforward architecture. Signals cascade through a hidden layer before reaching the output, with every neuron's dot product compressed by a non-linear Logistic Sigmoid function. During backpropagation, optimization gradients are computed via the chain rule to minimize the sum of squared errors ($E$). The error terms ($\delta$) are calculated at the output and distributed backward through the weight matrices using the first derivative of the activation function, expressed as:
         > $$Loss Function =\Large E = \frac{1}{2}(Y_s - \hat{Y}_s)^2$$
+        >
         > $$\Large h_j = \sigma(z_{\text{hidden}_j}) = \sigma(\sum_{i} (x_i \cdot w_{ij}) + b_j) = \frac{1}{1 + e^{-z_{\text{hidden}_j}}}$$
+        >
         > $$\Large \hat{Y}_s = \sigma(z_{\text{output}}) =\sigma(\sum_{j} (h_j \cdot w_j) + b_{\text{output}}) = \frac{1}{1 + e^{-z_{\text{output}}}}$$
+        >
         > $$\Large \frac{\partial \sigma(z)}{\partial z} = \sigma(z)(1 - \sigma(z))$$
-
+        ----
         > $$\Large \delta_{\text{output}} = -\frac{\partial E}{\partial z_{\text{output}}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}}$$
+        >
         > $$\Large = - \frac{\partial}{\partial  \hat{Y}_s} \left[ \frac{1}{2}(Y_s - \hat{Y}_s)^2 \right] \cdot \hat{Y}_s(1 - \hat{Y}_s)$$
+        >
         > $$\Large = -(-(Y_s - \hat{Y}_s)) \cdot \hat{Y}_s(1 - \hat{Y}_s) = \Large  (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)$$
-
+        ----
         > $$\Large \delta_{\text{hidden}_j} = -\frac{\partial E}{\partial z_{\text{hidden}_j}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}} \cdot \frac{\partial z_{\text{output}}}{\partial h_j} \cdot \frac{\partial h_j}{\partial z_{\text{hidden}_j}}$$
+        >
         > $$\Large = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s) \cdot w_j \cdot h_j(1 - h_j)$$
+        >
         > $$\Large = \delta_{\text{output}} \cdot w_j \cdot h_j(1 - h_j)$$
-        
+        ----
         > $$\Large \delta_{\text{output}} = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)$$
+        >
         > $$\Large \delta_{\text{hidden}_j} = \delta_{\text{output}} \cdot w_{j} \cdot h_j(1 - h_j)$$
-
+        ----
         > $$\Large \Delta w_j = \alpha \cdot \delta_{\text{output}} \cdot h_j \qquad \text{and} \qquad \Delta b_{\text{output}} = \alpha \cdot \delta_{\text{output}}$$
+        >
         > $$\Large \Delta w_{ij} = \alpha \cdot \delta_{\text{hidden}_j} \cdot x_i \qquad \text{and} \qquad \Delta b_j = \alpha \cdot \delta_{\text{hidden}_j}$$
         > * $E$ is the total squared error for a single training sample.
         > * $Y_s$ is the target output (ground truth) for sample $s$.
@@ -97,20 +116,27 @@ Some simple projets:
     - **Project Goal:** The algorithm learns to classify physical Iris flower samples into one of three distinct biological species (*Iris setosa*, *Iris versicolor*, or *Iris virginica*) based on four continuous anatomical feature measurements extracted from an imported dataset file.
     - **Mathematical Framework:** The system utilizes a fully connected Feedforward Neural Network architecture optimized via supervised Gradient Descent and Backpropagation. The output distribution is normalized into mutually exclusive probabilities using the Softmax activation function. Network errors are evaluated using a categorical cross-entropy derivative formulation. When a pattern propagates through the system, weights and biases are iteratively updated by projecting errors backward layer-by-layer, scaling adjustments by the local sensitivity curve of the hidden nodes. The mathematical update rule for minimizing the network error matrix entry is governed by the generalized delta rule:
         > $$Loss Function = E = -\sum_{k} Y_{s,k} \ln(\hat{Y}_{s,k})$$
+        >
         > $$\Large h_j = \sigma(z_{\text{hidden}_j}) = \sigma\left(\sum_{i} (x_i \cdot w_{ij}) + b_j\right) = \frac{1}{1 + e^{-z_{\text{hidden}_j}}}$$
+        >
         > $$\Large \hat{Y}_{s,k} = \text{softmax}(z_{\text{output}_k}) = \frac{e^{z_{\text{output}_k}}}{\sum_{m} e^{z_{\text{output}_m}}}$$
+        >
         > $$\Large \frac{\partial \sigma(z)}{\partial z} = \sigma(z)(1 - \sigma(z))$$
-
+        ----
         > $$\Large \delta_{\text{output}_k} = \frac{\partial E}{\partial z_{\text{output}_k}} = \hat{Y}_{s,k} - Y_{s,k}$$
-
+        >
         > $$\Large \delta_{\text{hidden}_j} = \frac{\partial E}{\partial z_{\text{hidden}_j}} = \sum_{k} \left( \frac{\partial E}{\partial z_{\text{output}_k}} \cdot \frac{\partial z_{\text{output}_k}}{\partial h_j} \right) \cdot \frac{\partial h_j}{\partial z_{\text{hidden}_j}}$$
+        >
         > $$\Large = \sum_{k} \left( \delta_{\text{output}_k} \cdot w_{jk} \right) \cdot h_j(1 - h_j)$$
+        >
         > $$\Large = \left( \sum_{k} \delta_{\text{output}_k} \cdot w_{jk} \right) \cdot h_j(1 - h_j)$$
-
+        ----
         > $$\Large \delta_{\text{output}_k} = \hat{Y}_{s,k} - Y_{s,k}$$
+        >
         > $$\Large \delta_{\text{hidden}_j} = \left( \sum_{k} \delta_{\text{output}_k} \cdot w_{jk} \right) \cdot h_j(1 - h_j)$$
-
+        ----
         > $$\Large \Delta w_{jk} = -\alpha \cdot \delta_{\text{output}_k} \cdot h_j \qquad \text{and} \qquad \Delta b_{\text{output}_k} = -\alpha \cdot \delta_{\text{output}_k}$$
+        >
         > $$\Large \Delta w_{ij} = -\alpha \cdot \delta_{\text{hidden}_j} \cdot x_i \qquad \text{and} \qquad \Delta b_j = -\alpha \cdot \delta_{\text{hidden}_j}$$
         > * $E$ is the Categorical Cross-Entropy loss for a single training sample.
         > * $Y_{s,k}$ is the target ground truth probability for class $k$ of sample $s$ (`sample.target[i]`).
@@ -136,6 +162,7 @@ Some simple projets:
     - **Project Goal:** The algorithm learns to recursively partition a categorical dataset of environmental observations into pure sub-segments to predict whether an individual will visit the beach based on structural information gain.
     - **Mathematical Framework:** The model is a parametric classification tree that uses Gini Impurity to evaluate the quality of categorical splits. At any given node with $C$ unique target classes, where $p_i$ represents the probability of a sample belonging to class $i$, the Gini Impurity $I_G$ is calculated as:
         > $$I_G(p) = 1 - \sum_{i=1}^{C} p_i^2$$
+        >
         > $$I_G(\text{Split}) = \frac{N_{\text{left}}}{N_{\text{total}}} I_G(\text{left}) + \frac{N_{\text{right}}}{N_{\text{total}}} I_G(\text{right})$$
     - **Implementation Details:** This system implements a binary Decision Tree classifier completely from scratch in C++. The training pipeline processes a categorical dataset containing environmental attributes (Weather, Temperature, and Weekend flags) mapped to a binary target class (goToBeach). During execution, the engine iteratively scans every feature branch inside findBestSplit using independent lexical scoping blocks to compute regional Gini indices. The dataset is recursively divided into left and right subset vectors to construct an explicit pointer-based tree structure (Node*) until max depth or total class purity is reached, enabling clean non-linear decision boundary printing via structured console indentation logs.
     
