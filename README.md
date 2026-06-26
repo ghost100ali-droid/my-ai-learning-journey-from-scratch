@@ -128,7 +128,7 @@ Some simple projets:
 8. ## Multiclass Iris Classifier Neural Network
     - **Project Goal:** The algorithm learns to classify physical Iris flower samples into one of three distinct biological species (*Iris setosa*, *Iris versicolor*, or *Iris virginica*) based on four continuous anatomical feature measurements extracted from an imported dataset file.
     - **Mathematical Framework:** The system utilizes a fully connected Feedforward Neural Network architecture optimized via supervised Gradient Descent and Backpropagation. The output distribution is normalized into mutually exclusive probabilities using the Softmax activation function. Network errors are evaluated using a categorical cross-entropy derivative formulation. When a pattern propagates through the system, weights and biases are iteratively updated by projecting errors backward layer-by-layer, scaling adjustments by the local sensitivity curve of the hidden nodes. The mathematical update rule for minimizing the network error matrix entry is governed by the generalized delta rule:
-       > $$\text{Loss Function} = E = -\sum_{k} Y_{s,k} \ln(\hat{Y}_{s,k})$$
+        > $$\text{Loss Function} = E = -\sum_{k} Y_{s,k} \ln(\hat{Y}_{s,k})$$
         >
         > $$\Large h_j = \sigma(z_{\text{hidden},j}) = \sigma\left(\sum_{i} (x_i \cdot w_{ij}) + b_j\right) = \frac{1}{1 + e^{-z_{\text{hidden},j}}}$$
         >
