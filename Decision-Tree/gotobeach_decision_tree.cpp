@@ -3,11 +3,9 @@
 #include <string>
 #include <cmath>
 
-// Using enums instead of strings for blazing fast comparisons
 enum class Weather { Sunny, Rainy };
-enum class Temp    { Hot, Mild, Cool };
+enum class Temp    { Hot, Cool };
 
-// Structure representing a single row in your dataset
 struct BeachSample {
     Weather weather;
     Temp temperature;
@@ -15,7 +13,6 @@ struct BeachSample {
     bool goToBeach; // Target Class
 };
 
-// Node structure for our Decision Tree
 struct Node {
     bool isLeaf = false;
     bool prediction = false; // Only matters if isLeaf is true
@@ -29,7 +26,6 @@ struct Node {
     Node* right = nullptr; // False branch
 };
 
-// Helper to calculate Gini Impurity
 double calculateGini(int yesCount, int noCount) {
     int total = yesCount + noCount;
     if (total == 0) return 0.0;
@@ -40,7 +36,6 @@ double calculateGini(int yesCount, int noCount) {
     return 1.0 - (pYes * pYes) - (pNo * pNo);
 }
 
-// Helper to count target distributions
 void getTargetCounts(const std::vector<BeachSample>& dataset, int& yesCount, int& noCount) {
     yesCount = 0; noCount = 0;
     for (const auto& sample : dataset) {
@@ -49,14 +44,12 @@ void getTargetCounts(const std::vector<BeachSample>& dataset, int& yesCount, int
     }
 }
 
-// Evaluates every feature to find the split that results in the lowest Gini Impurity
 void findBestSplit(const std::vector<BeachSample>& dataset, std::string& bestFeature, 
                    Weather& bestWeather, Temp& bestTemp, bool& bestBool, double& minGini) {
     
     minGini = 999.0;
     int totalSamples = dataset.size();
 
-    // 1. Evaluate "Weather" Split (Sunny vs Rainy)
     {
         int leftYes = 0, leftNo = 0, rightYes = 0, rightNo = 0;
         for (const auto& s : dataset) {
@@ -66,27 +59,27 @@ void findBestSplit(const std::vector<BeachSample>& dataset, std::string& bestFea
         double totalGini = ((double)(leftYes + leftNo) / totalSamples) * calculateGini(leftYes, leftNo) +
                            ((double)(rightYes + rightNo) / totalSamples) * calculateGini(rightYes, rightNo);
         if (totalGini < minGini) {
-            minGini = totalGini; bestFeature = "Weather"; bestWeather = Weather::Sunny;
+            minGini = totalGini; 
+            bestFeature = "Weather"; 
+            bestWeather = Weather::Sunny;
         }
     }
 
-    // 2. Evaluate "Temperature" Splits
-    // Since Temp has 3 categories (Hot, Mild, Cool), we test splits separating one group from the rest
-    Temp tempOptions[] = {Temp::Hot, Temp::Mild, Temp::Cool};
-    for (Temp t : tempOptions) {
-        int leftYes = 0, leftNo = 0, rightYes = 0, rightNo = 0;
-        for (const auto& s : dataset) {
-            if (s.temperature == t) { s.goToBeach ? leftYes++ : leftNo++; }
+    {
+        int leftYes = 0, leftNo = 0, rightYes = 0, rightNo = 0 ;
+        for ( const auto& s : dataset){
+            if(s.temperature == Temp::Hot){ s.goToBeach ? leftYes++ : leftNo++; }
             else { s.goToBeach ? rightYes++ : rightNo++; }
         }
-        double totalGini = ((double)(leftYes + leftNo) / totalSamples) * calculateGini(leftYes, leftNo) +
-                           ((double)(rightYes + rightNo) / totalSamples) * calculateGini(rightYes, rightNo);
-        if (totalGini < minGini) {
-            minGini = totalGini; bestFeature = "Temperature"; bestTemp = t;
+        double totalGini = ((double) (leftYes + leftNo) / totalSamples) * calculateGini(leftYes, leftNo) +
+                           ((double) (rightYes + rightNo) / totalSamples) * calculateGini(rightYes, rightNo);
+        if(minGini> totalGini) {
+            minGini = totalGini;
+            bestFeature = "Temperature";
+            bestTemp = Temp::Hot;
         }
     }
 
-    // 3. Evaluate "Weekend" Split (Yes vs No)
     {
         int leftYes = 0, leftNo = 0, rightYes = 0, rightNo = 0;
         for (const auto& s : dataset) {
@@ -96,12 +89,13 @@ void findBestSplit(const std::vector<BeachSample>& dataset, std::string& bestFea
         double totalGini = ((double)(leftYes + leftNo) / totalSamples) * calculateGini(leftYes, leftNo) +
                            ((double)(rightYes + rightNo) / totalSamples) * calculateGini(rightYes, rightNo);
         if (totalGini < minGini) {
-            minGini = totalGini; bestFeature = "Weekend"; bestBool = true;
+            minGini = totalGini; 
+            bestFeature = "Weekend"; 
+            bestBool = true;
         }
     }
 }
 
-// Recursive function to build the tree architecture
 Node* buildTree(const std::vector<BeachSample>& dataset, int depth, int maxDepth) {
     Node* node = new Node();
     
@@ -156,12 +150,10 @@ Node* buildTree(const std::vector<BeachSample>& dataset, int depth, int maxDepth
     return node;
 }
 
-// Helper string mappers for printing out the console tree cleanly
-std::string weatherToString(Weather w) { return (w == Weather::Sunny) ? "Sunny" : "Rainy"; }
+std::string weatherToString(Weather w) { 
+    return (w == Weather::Sunny) ? "Sunny" : "Rainy"; }
 std::string tempToString(Temp t) {
-    if (t == Temp::Hot) return "Hot";
-    if (t == Temp::Mild) return "Mild";
-    return "Cool";
+    return (t == Temp::Hot) ? "Hot" : "Cool";
 }
 
 void printTree(Node* root, int indent = 0) {
@@ -183,15 +175,14 @@ void printTree(Node* root, int indent = 0) {
 }
 
 int main() {
-    // Exact Dataset from your prompt loaded systematically
     std::vector<BeachSample> dataset = {
         {Weather::Sunny, Temp::Hot,  true,  true},  // Sunny, Hot,  Yes -> Yes
         {Weather::Sunny, Temp::Hot,  false, true},  // Sunny, Hot,  No  -> Yes
-        {Weather::Rainy, Temp::Mild, true,  false}, // Rainy, Mild, Yes -> No
+        {Weather::Rainy, Temp::Cool, true,  false}, // Rainy, Cool, Yes -> No
         {Weather::Sunny, Temp::Cool, true,  false}, // Sunny, Cool, Yes -> No
         {Weather::Rainy, Temp::Hot,  false, false}, // Rainy, Hot,  No  -> No
         {Weather::Sunny, Temp::Hot,  true,  true},  // Sunny, Hot,  Yes -> Yes
-        {Weather::Sunny, Temp::Mild, false, true}   // Sunny, Mild, No  -> Yes
+        {Weather::Sunny, Temp::Hot, false, true}   // Sunny, Hot, No  -> Yes
     };
 
     std::cout << "--- Training Decision Tree On Beach Dataset ---\n";

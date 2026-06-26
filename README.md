@@ -5,9 +5,9 @@ Most of my projects will be in C++
 Some simple projets:
 1. ## Linear Decision Boundary
     - **Project Goal:** The algorithm learns whether the sum of two numbers is greater than or less than 100 using supervised learning.
-    - **Classification Rules:** 
-        > - 1 -> (x1 + x2 > 100) 
-        > - 0 -> (x1 + x2 < 100)
+    - **Classification Rules:**  
+        >1 -> (x1 + x2 > 100)  
+        0 -> (x1 + x2 < 100)
     - **Implementation Details:** It implements a single-layer Perceptron from scratch to find the optimal weights and bias for a linear decision boundary. The model is trained on a synthetic dataset of 10,000 generated coordinates $(x_1, x_2)$, where each point is labeled based on whether its sum exceeds a threshold of 100 ($x_1 + x_2 > 100$). By utilizing a basic threshold activation function and adjusting the weights ($w_1, w_2, w_3$) incrementally through supervised learning steps governed by a learning rate ($\alpha = 0.0005$), the algorithm iteratively minimizes classification errors over 40 epochs. Ultimately, the code successfully learns to approximate the mathematical boundary dividing the two data classes.
 2. ## Nonelinear Regression Carprice
     - **Project Goal:** The algorithm learns to predict the resale price of a used car based on three input features—purchase price, age, and mileage—using supervised non-linear regression.
@@ -29,17 +29,17 @@ Some simple projets:
     - **Project Goal:** The algorithm learns to classify a given hour of the day as either daytime (light) or nighttime (dark) using supervised polynomial logistic regression, successfully capturing multiple temporal thresholds simultaneously.
     - **Mathematical Framework:** Because a single-neuron model cannot inherently separate non-linear data structures (where an island of light is trapped between two periods of darkness), the algorithm expands the input space using a polynomial expansion. By calculating a quadratic feature component ($\text{hour}^2$), the model wraps a parabolic decision boundary around the daylight parameters. The raw hypothesis is pushed through a Sigmoid activation function to map real values to a stable probability distribution between $[0, 1]$. It is expressed as:
         > $$\Large Z = w_0 + w_1 \cdot \left(\frac{\text{hour}}{24}\right) + w_2 \cdot \left(\frac{\text{hour}}{24}\right)^2$$
-        > $$\Large Z = w_0 + w_1 \cdot X_1 + w_2 \cdot X_2^2$$
-        > $$\Large \text{predicted (Z)} = \frac{1}{1 + e^{-z}}$$
-        > $$Loss = - \big[ y \ln(predicted) + (1 - y) \ln(1 - predicted) \big]$$
-        > $$\frac{\partial \text{Loss}}{\partial w_j} = \frac{\partial \text{Loss}}{\partial \text{predicted}} \times \frac{\partial \text{predicted}}{\partial z} \times \frac{\partial z}{\partial w_j}$$
-        > $$\frac{\partial \text{Loss}}{\partial w_j} = \frac{\text{predicted} - y}{\cancel{\text{predicted}(1 - \text{predicted})}} \times \cancel{\text{predicted}(1 - \text{predicted})} \times \frac{\partial z}{\partial w_j}$$
-        > $$\frac{\partial \text{Loss}}{\partial w_j} = (\text{predicted} - y) \times \frac{\partial z}{\partial w_j}$$
+        > - $$\Large Z = w_0 + w_1 \cdot X_1 + w_2 \cdot X_2^2$$
+        > - $$\Large \text{predicted (Z)} = \frac{1}{1 + e^{-z}}$$
+        > - $$Loss = - \big[ y \ln(predicted) + (1 - y) \ln(1 - predicted) \big]$$
+        > - $$\frac{\partial \text{Loss}}{\partial w_j} = \frac{\partial \text{Loss}}{\partial \text{predicted}} \times \frac{\partial \text{predicted}}{\partial z} \times \frac{\partial z}{\partial w_j}$$
+        > - $$\frac{\partial \text{Loss}}{\partial w_j} = \frac{\text{predicted} - y}{\cancel{\text{predicted}(1 - \text{predicted})}} \times \cancel{\text{predicted}(1 - \text{predicted})} \times \frac{\partial z}{\partial w_j}$$
+        > - $$\frac{\partial \text{Loss}}{\partial w_j} = (\text{predicted} - y) \times \frac{\partial z}{\partial w_j}$$
         ---
-        > $$w_j \leftarrow w_j - \alpha \cdot \frac{\partial \text{Loss}}{\partial w_j} $$
-        > $$w_0 \leftarrow w_0 - \alpha \cdot (predicted - y)$$
-        > $$w_1 \leftarrow w_1 - \alpha \cdot (predicted - y) \cdot x$$
-        > $$w_2 \leftarrow w_2 - \alpha \cdot (predicted - y) \cdot x^2$$
+        > - $$w_j \leftarrow w_j - \alpha \cdot \frac{\partial \text{Loss}}{\partial w_j} $$
+        > - $$w_0 \leftarrow w_0 - \alpha \cdot (predicted - y)$$
+        > - $$w_1 \leftarrow w_1 - \alpha \cdot (predicted - y) \cdot x$$
+        > - $$w_2 \leftarrow w_2 - \alpha \cdot (predicted - y) \cdot x^2$$
     - **Implementation Details:** The engine implements a parametric polynomial logistic regression network built entirely from scratch in. The training pipeline dynamically generates a synthetic matrix of 10,000 distinct timestamps, automatically establishing ground-truth boundaries between sunrise (6.00) and sunset (18.00). To avoid gradient saturation across the Sigmoid curves and ensure smooth numeric step adjustments, time values are scaled directly down to a normalized $[0, 1]$ decimal range. Utilizing Stochastic Online Learning paired with Gradient Descent, the network iteratively tunes the feature parameters ($w_0, w_1, w_2$) using a learning rate ($\alpha = 0.01$) over 100 epochs, allowing the model to conform perfectly to the parabolic thresholds and maximize evaluation classification accuracy.
 6.  ## Q-Learning Path Finder
     - **Project Goal:** The algorithm learns to navigate an autonomous agent through a 2D grid matrix containing static obstacles, discovering the shortest optimal path from a specific starting position to a designated target destination.
@@ -55,7 +55,6 @@ Some simple projets:
 7. ## Multi-Layer Perceptron XOR Gate Classifier
     - **Project Goal:** The algorithm learns to resolve the classic non-linearly separable XOR logical function, training a multi-layer neural network from scratch to map binary input coordinate pairs into their correct single-bit parity outputs.
     - **Mathematical Framework:** Because a single-layer perceptron cannot construct a non-linear decision boundary to isolate the staggered true and false coordinates of an XOR truth table, the system utilizes a 2-2-1 feedforward architecture. Signals cascade through a hidden layer before reaching the output, with every neuron's dot product compressed by a non-linear Logistic Sigmoid function. During backpropagation, optimization gradients are computed via the chain rule to minimize the sum of squared errors ($E$). The error terms ($\delta$) are calculated at the output and distributed backward through the weight matrices using the first derivative of the activation function, expressed as:
-
         > $$Loss Function =\Large E = \frac{1}{2}(Y_s - \hat{Y}_s)^2$$
         > $$\Large h_j = \sigma(z_{\text{hidden}_j}) = \sigma(\sum_{i} (x_i \cdot w_{ij}) + b_j) = \frac{1}{1 + e^{-z_{\text{hidden}_j}}}$$
         > $$\Large \hat{Y}_s = \sigma(z_{\text{output}}) =\sigma(\sum_{j} (h_j \cdot w_j) + b_{\text{output}}) = \frac{1}{1 + e^{-z_{\text{output}}}}$$
@@ -133,3 +132,21 @@ Some simple projets:
         > * $\Delta w_{ij}$ is the update amount subtracted from the input-to-hidden weight matrix.
         > * $\Delta b_j$ is the update amount subtracted from the hidden layer bias vector.
     - **Implementation Details:** The engine compiles a structured 3-layer multilayer perceptron object (`4` inputs $\rightarrow$ `14` hidden units $\rightarrow$ `3` outputs). The structural training pipeline processes an input CSV source dataset containing 150 instances, parsing flower dimensions into a customized data struct object (`IrisSample`). Target labels are mapped directly onto orthogonal One-Hot encoded arrays. To prevent model saturation and weight bias loops, the data collection is mixed uniformly before processing using a stochastic pseudo-random engine shuffle. The runtime network trains across `500` continuous processing epochs using stochastic in-place matrix operations, continuously tuning structural weight layers (`WIH`, `WHO`) and threshold bias arrays until output probabilities consistently match raw flower categories.
+9. ## Decision Tree Binary Beach Classifie
+    - **Project Goal:** The algorithm learns to recursively partition a categorical dataset of environmental observations into pure sub-segments to predict whether an individual will visit the beach based on structural information gain.
+    - **Mathematical Framework:** The model is a parametric classification tree that uses Gini Impurity to evaluate the quality of categorical splits. At any given node with $C$ unique target classes, where $p_i$ represents the probability of a sample belonging to class $i$, the Gini Impurity $I_G$ is calculated as:
+        > $$I_G(p) = 1 - \sum_{i=1}^{C} p_i^2$$
+        > $$I_G(\text{Split}) = \frac{N_{\text{left}}}{N_{\text{total}}} I_G(\text{left}) + \frac{N_{\text{right}}}{N_{\text{total}}} I_G(\text{right})$$
+    - **Implementation Details:** This system implements a binary Decision Tree classifier completely from scratch in C++. The training pipeline processes a categorical dataset containing environmental attributes (Weather, Temperature, and Weekend flags) mapped to a binary target class (goToBeach). During execution, the engine iteratively scans every feature branch inside findBestSplit using independent lexical scoping blocks to compute regional Gini indices. The dataset is recursively divided into left and right subset vectors to construct an explicit pointer-based tree structure (Node*) until max depth or total class purity is reached, enabling clean non-linear decision boundary printing via structured console indentation logs.
+    
+        |Weather | Temperature | Weekend | Will Go to Beach? |
+        | :--- | :--- | :--- | :--- |
+        | Sunny | Hot | Yes | Yes |
+        | Sunny | Hot | No | Yes |
+        | Rainy | Cool | Yes | No |
+        | Sunny | Cool | Yes | No |
+        | Rainy | Hot | No | No |
+        | Sunny | Hot | Yes | Yes |
+        | Sunny | Hot | No | Yes |
+
+        ![alt text](1000000096.jpg)
