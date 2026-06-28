@@ -26,8 +26,6 @@ class SupportVectorMachine {
         std::vector<double> alpha;
         int stepCounter = 0;
 
-        // FIXED: Kept const so it works within predict()
-        // FIXED: Removed std::sqrt to compute the true SQUARED Euclidean distance for RBF
         double rbfKernel(DataPoint dp1, DataPoint dp2) const {
             double sq_dist = std::pow(dp1.positionx - dp2.positionx, 2) + 
                              std::pow(dp1.positiony - dp2.positiony, 2);
@@ -35,7 +33,6 @@ class SupportVectorMachine {
         }
 
     public:
-        // FIXED: Moved to public scope so main() can trigger initialization
         void createData() {
             dataset.clear();
             testingdataset.clear();
@@ -61,13 +58,11 @@ class SupportVectorMachine {
             }
         }
 
-        // Added an epoch multi-pass setup to ensure the boundary converges beautifully
         void fit(int epochs = 20) {
-            stepCounter = 0; // Reset time metrics per optimization run
-            
+            stepCounter = 0; 
+
             for (int epoch = 0; epoch < epochs; epoch++) {
                 for (size_t i = 0; i < dataset.size(); i++) {
-                    // FIXED: Increments on every single iteration (Global Time tracking)
                     stepCounter++; 
                     
                     double rawPredictedScore = 0.0;
@@ -78,7 +73,6 @@ class SupportVectorMachine {
                     }
                     
                     if (dataset[i].label * rawPredictedScore < 1.0) {
-                        // FIXED: Replaced integer literal 1 with double 1.0 to guarantee safe precision
                         alpha[i] += 1.0 / (lambda * stepCounter);
                     }
                 }
@@ -95,7 +89,6 @@ class SupportVectorMachine {
             return (score >= 0.0) ? 1 : -1;
         }
 
-        // Utility method to print operational metrics out to console window
         void evaluate() const {
             int correct = 0;
             for (const auto& testPoint : testingdataset) {
@@ -115,13 +108,7 @@ class SupportVectorMachine {
 };
 
 int main() {
-    // Cross-platform console terminal refresh clearing implementation
-    #ifdef _WIN32
-        std::system("cls");
-    #else
-        std::system("clear");
-    #endif
-
+    std::system("cls");
     std::srand(std::time(nullptr));
 
     SupportVectorMachine svm;

@@ -67,44 +67,43 @@ Some simple projets:
 7. ## Multi-Layer Perceptron XOR Gate Classifier
     - **Project Goal:** The algorithm learns to resolve the classic non-linearly separable XOR logical function, training a multi-layer neural network from scratch to map binary input coordinate pairs into their correct single-bit parity outputs.
     - **Mathematical Framework:** Because a single-layer perceptron cannot construct a non-linear decision boundary to isolate the staggered true and false coordinates of an XOR truth table, the system utilizes a 2-2-1 feedforward architecture. Signals cascade through a hidden layer before reaching the output, with every neuron's dot product compressed by a non-linear Logistic Sigmoid function. During backpropagation, optimization gradients are computed via the chain rule to minimize the sum of squared errors ($E$). The error terms ($\delta$) are calculated at the output and distributed backward through the weight matrices using the first derivative of the activation function, expressed as:
-        > $$\Large \text{Loss Function} = E = \frac{1}{2}(Y_s - \hat{Y}_s)^2$$
+        > $${\Large \text{Loss Function} = E = \frac{1}{2}(Y_s - \hat{Y}_s)^2}$$
         >
-        > $$\Large h_j = \sigma(z_{\text{hidden},j}) = \sigma\left(\sum_{i} (x_i \cdot w_{ij}) + b_j\right) = \frac{1}{1 + e^{-z_{\text{hidden},j}}}$$
+        > $${\Large h_j = \sigma(z_{\text{hidden},j}) = \sigma\left(\sum_{i} (x_i \cdot w_{ij}) + b_j\right) = \frac{1}{1 + e^{-z_{\text{hidden},j}}}}$$
         >
-        > $$\Large \hat{Y}_s = \sigma(z_{\text{output}}) = \sigma\left(\sum_{j} (h_j \cdot w_j) + b_{\text{output}}\right) = \frac{1}{1 + e^{-z_{\text{output}}}}$$
+        > $${\Large \hat{Y}_s = \sigma(z_{\text{output}}) = \sigma\left(\sum_{j} (h_j \cdot w_j) + b_{\text{output}}\right) = \frac{1}{1 + e^{-z_{\text{output}}}}}$$
         >
-        > $$\Large \frac{\partial \sigma(z)}{\partial z} = \sigma(z)(1 - \sigma(z))$$
-        >
-        > ---
-        >
-        > $$\Large \delta_{\text{output}} = -\frac{\partial E}{\partial z_{\text{output}}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}}$$
-        >
-        > $$\Large = - \frac{\partial}{\partial \hat{Y}_s} \left[ \frac{1}{2}(Y_s - \hat{Y}_s)^2 \right] \cdot \hat{Y}_s(1 - \hat{Y}_s)$$
-        >
-        > $$\Large = -(-(Y_s - \hat{Y}_s)) \cdot \hat{Y}_s(1 - \hat{Y}_s) = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)$$
+        > $${\Large \frac{\partial \sigma(z)}{\partial z} = \sigma(z)(1 - \sigma(z))}$$
         >
         > ---
         >
-        > $$\Large \delta_{\text{hidden},j} = -\frac{\partial E}{\partial z_{\text{hidden},j}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}} \cdot \frac{\partial z_{\text{output}}}{\partial h_j} \cdot \frac{\partial h_j}{\partial z_{\text{hidden},j}}$$
+        > $${\Large \delta_{\text{output}} = -\frac{\partial E}{\partial z_{\text{output}}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}}}$$
         >
-        > $$\Large = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s) \cdot w_j \cdot h_j(1 - h_j)$$
+        > $${\Large = - \frac{\partial}{\partial \hat{Y}_s} \left[ \frac{1}{2}(Y_s - \hat{Y}_s)^2 \right] \cdot \hat{Y}_s(1 - \hat{Y}_s)}$$
         >
-        > $$\Large = \delta_{\text{output}} \cdot w_j \cdot h_j(1 - h_j)$$
-        >
-        > ---
-        >
-        > $$\Large \delta_{\text{output}} = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)$$
-        >
-        > $$\Large \delta_{\text{hidden},j} = \delta_{\text{output}} \cdot w_j \cdot h_j(1 - h_j)$$
+        > $${\Large = -(-(Y_s - \hat{Y}_s)) \cdot \hat{Y}_s(1 - \hat{Y}_s) = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)}$$
         >
         > ---
         >
-        > $$\Large \Delta w_j = \alpha \cdot \delta_{\text{output}} \cdot h_j \qquad \text{and} \qquad \Delta b_{\text{output}} = \alpha \cdot \delta_{\text{output}}$$
+        > $${\Large \delta_{\text{hidden},j} = -\frac{\partial E}{\partial z_{\text{hidden},j}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}} \cdot \frac{\partial z_{\text{output}}}{\partial h_j} \cdot \frac{\partial h_j}{\partial z_{\text{hidden},j}}}$$
         >
-        > $$\Large \Delta w_{ij} = \alpha \cdot \delta_{\text{hidden},j} \cdot x_i \qquad \text{and} \qquad \Delta b_j = \alpha \cdot \delta_{\text{hidden},j}$$
+        > $${\Large = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s) \cdot w_j \cdot h_j(1 - h_j)}$$
+        >
+        > $${\Large = \delta_{\text{output}} \cdot w_j \cdot h_j(1 - h_j)}$$
         >
         > ---
         >
+        > $${\Large \delta_{\text{output}} = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)}$$
+        >
+        > $${\Large \delta_{\text{hidden},j} = \delta_{\text{output}} \cdot w_j \cdot h_j(1 - h_j)}$$
+        >
+        > ---
+        >
+        > $${\Large \Delta w_j = \alpha \cdot \delta_{\text{output}} \cdot h_j \qquad \text{and} \qquad \Delta b_{\text{output}} = \alpha \cdot \delta_{\text{output}}}$$
+        >
+        > $${\Large \Delta w_{ij} = \alpha \cdot \delta_{\text{hidden},j} \cdot x_i \qquad \text{and} \qquad \Delta b_j = \alpha \cdot \delta_{\text{hidden},j}}$$
+        >
+        > ---
         > * $E$ is the total squared error for a single training sample.
         > * $Y_s$ is the target output (ground truth) for sample $s$.
         > * $\hat{Y}_s$ is the predicted output from the model's output node.
@@ -199,3 +198,9 @@ Some simple projets:
         | Sunny | Hot | No | Yes |
 
         ![alt text](1000000096.jpg)
+
+3. ## Nonlinear Classification SVMProject 
+    - **Goal:** The algorithm learns to classify 2D coordinate positions into binary classes ($1$ or $-1$) based on whether they fall inside or outside a circular boundary layout using supervised non-linear classification.
+    - **Mathematical Framework:** The model maps non-linearly separable coordinates into an infinite-dimensional feature space using a Radial Basis Function (RBF) Gaussian kernel. Predictions are driven by a dual-form scoring system where active importance weights ($\alpha$) scale the local proximity impact of critical boundary points. It is expressed as:
+    $$\Large f(x_i) = \sum_{j=1}^{n} \alpha_j y_j e^{-\gamma \|x_j - x_i\|^2}$$
+    - **Implementation Details:** It implements a soft-margin Support Vector Machine trained from scratch using the Pegasos stochastic gradient descent framework to optimize a hinge loss metric. The pipeline automatically constructs a synthetic dataset consisting of 600 training and 200 testing records distributed across a localized coordinate field ($[-15, 15]$) where a radius limit ($x^2 + y^2 \le 100$) determines the true labels. To maximize the geometric soft-margin separation gap and penalize boundary violations, individual point importance metrics are selectively modified during training. By tracking global optimization maturity over multiple epochs via a shared time clock ($t$) and conditionally injecting inverse step-size parameters ($\frac{1}{\lambda \cdot t}$) into violating coordinates, the system compresses the boundary data into a sparse collection of active Support Vectors and extracts high evaluation accuracy scores.
