@@ -131,13 +131,13 @@ Some simple projets:
         >
         > $$\Large h_j = \sigma(z_{\text{hidden},j}) = \sigma\left(\sum_{i} (x_i \cdot w_{ij}) + b_j\right) = \frac{1}{1 + e^{-z_{\text{hidden},j}}}$$
         >
-        > $$\Large \hat{Y}_{s,k} = \text{softmax}(z_{\text{output},k}) = \frac{e^{z_{\text{output},k}}}{\sum_{m} e^{z_{\text{output},m}}}$$
+        > $`\hat{Y}_{s,k} = \text{softmax}(z_{\text{output},k}) = \frac{e^{z_{\text{output},k}}}{\sum_{m} e^{z_{\text{output},m}}}`$
         >
         > $$\Large \frac{\partial \sigma(z)}{\partial z} = \sigma(z)(1 - \sigma(z))$$
         >
         > ---
         >
-        > $$\Large \delta_{\text{output},k} = \frac{\partial E}{\partial z_{\text{output},k}} = \hat{Y}_{s,k} - Y_{s,k}$$
+        > $`\delta_{\text{output},k} = \frac{\partial E}{\partial z_{\text{output},k}} = \hat{Y}_{s,k} - Y_{s,k}`$
         >
         > $$\Large \delta_{\text{hidden},j} = \frac{\partial E}{\partial z_{\text{hidden},j}} = \sum_{k} \left( \frac{\partial E}{\partial z_{\text{output},k}} \cdot \frac{\partial z_{\text{output},k}}{\partial h_j} \right) \cdot \frac{\partial h_j}{\partial z_{\text{hidden},j}}$$
         >
@@ -147,7 +147,7 @@ Some simple projets:
         >
         > ---
         >
-        > $$\Large \delta_{\text{output},k} = \hat{Y}_{s,k} - Y_{s,k}$$
+        > $`\delta_{\text{output},k} = \hat{Y}_{s,k} - Y_{s,k}`$
         >
         > $$\Large \delta_{\text{hidden},j} = \left( \sum_{k} \delta_{\text{output},k} \cdot w_{jk} \right) \cdot h_j(1 - h_j)$$
         >
