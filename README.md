@@ -71,8 +71,7 @@ Some simple projets:
         >
         > $$\Large h_j = \sigma(z_{\text{hidden},j}) = \sigma\left(\sum_{i} (x_i \cdot w_{ij}) + b_j\right) = \frac{1}{1 + e^{-z_{\text{hidden},j}}}$$
         >
-        > $$ \hat{Y}_s = \sigma(z_{\text{output}}) = \sigma \left( \sum_{j} (h_j \cdot w_j) + b_{\text{output}} \right) = \frac{1}{1 + e^{-z_{\text{output}}}}
-        > $$
+        > $$\Large \hat{Y}_s = \sigma(z_{\text{output}}) = \sigma \left( \sum_{j} (h_j \cdot w_j) + b_{\text{output}} \right) = \frac{1}{1 + e^{-z_{\text{output}}}}$$
         >
         > $$\Large \frac{\partial \sigma(z)}{\partial z} = \sigma(z)(1 - \sigma(z))$$
         >
