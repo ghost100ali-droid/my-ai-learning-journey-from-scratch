@@ -85,7 +85,8 @@ Some simple projets:
         >
         > ---
         >
-        > $$\Large \delta_{\text{hidden},j} = -\frac{\partial E}{\partial z_{\text{hidden},j}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}} \cdot \frac{\partial z_{\text{output}}}{\partial h_j} \cdot \frac{\partial h_j}{\partial z_{\text{hidden},j}}$$
+        > $$ \delta_{\text{hidden},j} = -\frac{\partial E}{\partial z_{\text{hidden},j}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}} \cdot \frac{\partial z_{\text{output}}}{\partial h_j} \cdot \frac{\partial h_j}{\partial z_{\text{hidden},j}}
+        > $$
         >
         > $$\Large = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s) \cdot w_j \cdot h_j(1 - h_j)$$
         >
