@@ -67,43 +67,44 @@ Some simple projets:
 7. ## Multi-Layer Perceptron XOR Gate Classifier
     - **Project Goal:** The algorithm learns to resolve the classic non-linearly separable XOR logical function, training a multi-layer neural network from scratch to map binary input coordinate pairs into their correct single-bit parity outputs.
     - **Mathematical Framework:** Because a single-layer perceptron cannot construct a non-linear decision boundary to isolate the staggered true and false coordinates of an XOR truth table, the system utilizes a 2-2-1 feedforward architecture. Signals cascade through a hidden layer before reaching the output, with every neuron's dot product compressed by a non-linear Logistic Sigmoid function. During backpropagation, optimization gradients are computed via the chain rule to minimize the sum of squared errors ($E$). The error terms ($\delta$) are calculated at the output and distributed backward through the weight matrices using the first derivative of the activation function, expressed as:
-        > $${\Large \text{Loss Function} = E = \frac{1}{2}(Y_s - \hat{Y}_s)^2}$$
+        > $$\Large \text{Loss Function} = E = \frac{1}{2}(Y_s - \hat{Y}_s)^2$$
         >
-        > $${\Large h_j = \sigma(z_{\text{hidden},j}) = \sigma\left(\sum_{i} (x_i \cdot w_{ij}) + b_j\right) = \frac{1}{1 + e^{-z_{\text{hidden},j}}}}$$
+        > $$\Large h_j = \sigma(z_{\text{hidden},j}) = \sigma\left(\sum_{i} (x_i \cdot w_{ij}) + b_j\right) = \frac{1}{1 + e^{-z_{\text{hidden},j}}}$$
         >
-        > $${\Large \hat{Y}_s = \sigma(z_{\text{output}}) = \sigma\left(\sum_{j} (h_j \cdot w_j) + b_{\text{output}}\right) = \frac{1}{1 + e^{-z_{\text{output}}}}}$$
+        > $$ \hat{Y}_s = \sigma(z_{\text{output}}) = \sigma\left(\sum_{j} (h_j \cdot w_j) + b_{\text{output}}\right) = \frac{1}{1 + e^{-z_{\text{output}}}}$$
         >
-        > $${\Large \frac{\partial \sigma(z)}{\partial z} = \sigma(z)(1 - \sigma(z))}$$
-        >
-        > ---
-        >
-        > $${\Large \delta_{\text{output}} = -\frac{\partial E}{\partial z_{\text{output}}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}}}$$
-        >
-        > $${\Large = - \frac{\partial}{\partial \hat{Y}_s} \left[ \frac{1}{2}(Y_s - \hat{Y}_s)^2 \right] \cdot \hat{Y}_s(1 - \hat{Y}_s)}$$
-        >
-        > $${\Large = -(-(Y_s - \hat{Y}_s)) \cdot \hat{Y}_s(1 - \hat{Y}_s) = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)}$$
+        > $$\Large \frac{\partial \sigma(z)}{\partial z} = \sigma(z)(1 - \sigma(z))$$
         >
         > ---
         >
-        > $${\Large \delta_{\text{hidden},j} = -\frac{\partial E}{\partial z_{\text{hidden},j}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}} \cdot \frac{\partial z_{\text{output}}}{\partial h_j} \cdot \frac{\partial h_j}{\partial z_{\text{hidden},j}}}$$
+        > $$ \delta_{\text{output}} = -\frac{\partial E}{\partial z_{\text{output}}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}}$$
         >
-        > $${\Large = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s) \cdot w_j \cdot h_j(1 - h_j)}$$
+        > $$\Large = - \frac{\partial}{\partial \hat{Y}_s} \left[ \frac{1}{2}(Y_s - \hat{Y}_s)^2 \right] \cdot \hat{Y}_s(1 - \hat{Y}_s)$$
         >
-        > $${\Large = \delta_{\text{output}} \cdot w_j \cdot h_j(1 - h_j)}$$
-        >
-        > ---
-        >
-        > $${\Large \delta_{\text{output}} = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)}$$
-        >
-        > $${\Large \delta_{\text{hidden},j} = \delta_{\text{output}} \cdot w_j \cdot h_j(1 - h_j)}$$
+        > $$\Large = -(-(Y_s - \hat{Y}_s)) \cdot \hat{Y}_s(1 - \hat{Y}_s) = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)$$
         >
         > ---
         >
-        > $${\Large \Delta w_j = \alpha \cdot \delta_{\text{output}} \cdot h_j \qquad \text{and} \qquad \Delta b_{\text{output}} = \alpha \cdot \delta_{\text{output}}}$$
+        > $$\Large \delta_{\text{hidden},j} = -\frac{\partial E}{\partial z_{\text{hidden},j}} = -\frac{\partial E}{\partial \hat{Y}_s} \cdot \frac{\partial \hat{Y}_s}{\partial z_{\text{output}}} \cdot \frac{\partial z_{\text{output}}}{\partial h_j} \cdot \frac{\partial h_j}{\partial z_{\text{hidden},j}}$$
         >
-        > $${\Large \Delta w_{ij} = \alpha \cdot \delta_{\text{hidden},j} \cdot x_i \qquad \text{and} \qquad \Delta b_j = \alpha \cdot \delta_{\text{hidden},j}}$$
+        > $$\Large = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s) \cdot w_j \cdot h_j(1 - h_j)$$
+        >
+        > $$\Large = \delta_{\text{output}} \cdot w_j \cdot h_j(1 - h_j)$$
         >
         > ---
+        >
+        > $$\Large \delta_{\text{output}} = (Y_s - \hat{Y}_s) \cdot \hat{Y}_s(1 - \hat{Y}_s)$$
+        >
+        > $$\Large \delta_{\text{hidden},j} = \delta_{\text{output}} \cdot w_j \cdot h_j(1 - h_j)$$
+        >
+        > ---
+        >
+        > $$\Large \Delta w_j = \alpha \cdot \delta_{\text{output}} \cdot h_j \qquad \text{and} \qquad \Delta b_{\text{output}} = \alpha \cdot \delta_{\text{output}}$$
+        >
+        > $$\Large \Delta w_{ij} = \alpha \cdot \delta_{\text{hidden},j} \cdot x_i \qquad \text{and} \qquad \Delta b_j = \alpha \cdot \delta_{\text{hidden},j}$$
+        >
+        > ---
+        >
         > * $E$ is the total squared error for a single training sample.
         > * $Y_s$ is the target output (ground truth) for sample $s$.
         > * $\hat{Y}_s$ is the predicted output from the model's output node.
